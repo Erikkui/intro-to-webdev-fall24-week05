@@ -10,7 +10,8 @@ const createMap = async () => {
 function initializeMap(data) { 
     let map = L.map( "map" )
     let OpenStreetMap = L.tileLayer( 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        minZoom: -3,                         
+        minZoom: -3,      
+        attribution: "© OpenStreetMap",                
     }).addTo( map )
 
     let geoJSON = L.geoJSON( data, {
