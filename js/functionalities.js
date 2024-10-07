@@ -26,6 +26,7 @@ function initializeMap(data) {
     let geoJSON = L.geoJSON( mapData, {
         weight: 2,
         onEachFeature: municipalityTooltipClosure( posData, negData ),
+        style: stylingClosure( posData, negData )
     }).addTo( map )
 
     map.fitBounds( geoJSON.getBounds() )
@@ -39,8 +40,30 @@ function municipalityTooltipClosure( posData, negData ) {
         const negativeMigration = negData.dataset.value[id]
 
         tooltipString = "<b>" + muniName + "</b><br> Positive migration: " + positiveMigration + "<br> Negative migration: " + negativeMigration
-        layer.bindTooltip( muniName )
+        // layer.bindTooltip( muniName )
         layer.bindPopup( tooltipString )
+    }
+}
+
+function stylingClosure( posData, negData ) {
+    return function style( feature ) {
+        const id = parseInt( feature.id.split(".")[1] )
+        const positiveMigration = posData.dataset.value[id]
+        const negativeMigration = negData.dataset.value[id]
+
+        hue = ( positiveMigration / negativeMigration ) ^ 3 * 60
+        hue = Math.min( hue, 120 )
+
+        return hsl( hue, 75, 50 )
+
+    }
+}
+
+function hsl( h, s, l ) {
+    return {
+        hue: h,
+        saturation: s,
+        lightness: l
     }
 }
 
