@@ -39,7 +39,8 @@ function municipalityTooltipClosure( posData, negData ) {
         const negativeMigration = negData.dataset.value[id]
 
         tooltipString = "<b>" + muniName + "</b><br> Positive migration: " + positiveMigration + "<br> Negative migration: " + negativeMigration
-        layer.bindTooltip( tooltipString )
+        layer.bindTooltip( muniName )
+        layer.bindPopup( tooltipString )
     }
 }
 
