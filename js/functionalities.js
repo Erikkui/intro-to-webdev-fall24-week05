@@ -1,3 +1,5 @@
+// Help on passing data to tooltip acquired from here: https://stackoverflow.com/questions/46580213/pass-a-parameter-to-oneachfeature-leaflet
+
 async function createMap() {
     // Fetch map data
     const url = "https://geo.stat.fi/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=tilastointialueet:kunta4500k&outputFormat=json&srsName=EPSG:4326"
@@ -6,13 +8,14 @@ async function createMap() {
 
     const [posData, negData] = await fetchMigrationData()
 
-    console.log(posData)
+    console.log(data)
 
     initializeMap( [data, posData, negData] )
 }
 
 function initializeMap(data) { 
     const [mapData, posData, negData] = data
+    console.log(posData)
     
     let map = L.map( "map" )
     let OpenStreetMap = L.tileLayer( 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -22,17 +25,22 @@ function initializeMap(data) {
 
     let geoJSON = L.geoJSON( mapData, {
         weight: 2,
-        onEachFeature: municipalityTooltip,
+        onEachFeature: municipalityTooltipClosure( posData, negData ),
     }).addTo( map )
 
     map.fitBounds( geoJSON.getBounds() )
 }
 
-const municipalityTooltip = (feature, layer) => {
-    const muniName = feature.properties.name
+function municipalityTooltipClosure( posData, negData ) {
+    return function municipalityTooltip( feature, layer ) {
+        const id = parseInt( feature.properties.kunta )
+        const muniName = feature.properties.name
+        const positiveMigration = posData.dataset.value[id]
+        const negativeMigration = negData.dataset.value[id]
 
-
-    layer.bindTooltip( muniName )
+        tooltipString = "<b>" + muniName + "</b><br> Positive migration: " + positiveMigration + "<br> Negative migration: " + negativeMigration
+        layer.bindTooltip( tooltipString )
+    }
 }
 
 async function fetchMigrationData() {
