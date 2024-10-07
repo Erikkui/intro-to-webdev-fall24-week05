@@ -45,8 +45,8 @@ function municipalityTooltipClosure( posData, negData ) {
                             <li> Positive migration: ${positiveMigration} </li>
                             <li> Negative migration: ${negativeMigration} 
                         </ul>`
-        layer.bindTooltip( muniName )
         layer.bindPopup( tooltipString )
+        layer.bindTooltip( muniName )
     }
 }
 
