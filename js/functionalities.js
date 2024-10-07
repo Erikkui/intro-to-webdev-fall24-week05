@@ -33,7 +33,7 @@ function initializeMap(data) {
 
 function municipalityTooltipClosure( posData, negData ) {
     return function municipalityTooltip( feature, layer ) {
-        const id = parseInt( feature.properties.kunta )
+        const id = parseInt ( feature.id.split(".")[1] )
         const muniName = feature.properties.name
         const positiveMigration = posData.dataset.value[id]
         const negativeMigration = negData.dataset.value[id]
