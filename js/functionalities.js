@@ -39,33 +39,31 @@ function municipalityTooltipClosure( posData, negData ) {
         const positiveMigration = posData.dataset.value[id]
         const negativeMigration = negData.dataset.value[id]
 
-        tooltipString = muniName + "\nPositive migration: " + positiveMigration + "\nNegative migration: " + negativeMigration
+        tooltipString = 
+                        `<ul> 
+                            <li> <b> ${muniName} </b> </li> 
+                            <li> Positive migration: ${positiveMigration} </li>
+                            <li> Negative migration: ${negativeMigration} 
+                        </ul>`
         layer.bindTooltip( muniName )
         layer.bindPopup( tooltipString )
     }
 }
 
-function stylingClosure( posData, negData ) {
-    return function style( feature ) {
-        const id = parseInt( feature.id.split(".")[1] )
-        const positiveMigration = posData.dataset.value[id]
-        const negativeMigration = negData.dataset.value[id]
+// function stylingClosure( posData, negData ) {
+//     return function style( feature ) {
+//         const id = parseInt( feature.id.split(".")[1] )
+//         const positiveMigration = posData.dataset.value[id]
+//         const negativeMigration = negData.dataset.value[id]
 
-        hue = ( positiveMigration / negativeMigration ) ^ 3 * 60
-        hue = Math.min( hue, 120 )
+//         hue = ( positiveMigration / negativeMigration ) ^ 3 * 60
+//         hue = Math.min( hue, 120 )
 
-        return hsl( hue, 75, 50 )
+//         return hsl( hue, 75, 50 )
 
-    }
-}
+//     }
+// }
 
-function hsl( h, s, l ) {
-    return {
-        hue: h,
-        saturation: s,
-        lightness: l
-    }
-}
 
 async function fetchMigrationData() {
     const posURL = "https://statfin.stat.fi/PxWeb/sq/4bb2c735-1dc3-4c5e-bde7-2165df85e65f"
